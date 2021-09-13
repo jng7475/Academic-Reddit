@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Reddit</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='main.css') }}">
+  </head>
+  <body>
+    <h1>
+      DETERMINE HOW MANY TRENDING POSTS ON A COLLEGE'S SUBREDIT ARE
+      ACADEMIC-RELATED AND NON-ACADEMIC-RELATED
+    </h1>
+    <p id="promt">Enter the name of the college</p>
+    <form id = "inputForm" action="/college" method="post">
+      <input
+        type="text"
+        id="inputBox"
+        placeholder="Example: UT Dallas"
+        name="college_input"
+      />
+      <input type="submit" id="submit" value="Submit"/>
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <td>Academic Posts</td>
+          <td>Non-academic Posts</td>
+        </td>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="acaPosts" class="postContent">
+            <div id="acaContent"> 
+              {% for title in acaTitles %}
+                      {% set count = loop.index0 %}
+                      <p class = "postTitle">{{title}}</p>
+                    {% for post in acaPosts %}
+                        {% if loop.index0 == count %}
+                            <p>{{post}}</p>
+                        {% endif %}
+                    {% endfor %}        
+                {% endfor %}
+              </div>
+          </td>
+          <td id="nonAcaPosts" class="postContent">
+            <div id="nonAcaContent">
+              {% for title in nonAcaTitles %}
+                      {% set count = loop.index0 %}
+                      <p class="postTitle">{{title}}</p>
+                    {% for post in nonAcaPosts %}
+                        {% if loop.index0 == count %}
+                            <p>{{post}}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td id="acaNum" class="postNum">{{result1}}</td>
+          <td id="nonAcaNum" class="postNum">{{result2}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

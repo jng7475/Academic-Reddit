@@ -1,0 +1,61 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    margin: 0 auto;
+    color: blue;
+    text-align: center;
+}
+
+#promt {
+    margin: 0 auto;
+    font-size: 33px;
+    width: 400px;
+}
+
+#inputBox {
+    height:50px;
+    text-align: center;
+}
+
+#submit {
+    height:50px;
+    width:100px;
+}
+
+#inputForm {
+    margin: 0 auto;
+    width: 300px;
+}
+
+table, thead, tbody, tr, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.postContent{
+    height: 600px;
+    width: 800px;
+}
+
+.postNum {
+    height: 100px;
+}
+
+table {
+    margin: 0 auto;
+    width: 800px;
+    text-align: center;
+}
+
+.postTitle {
+    color:red;
+}
+
+thead {
+    height: 50px;    
+}
+
+
