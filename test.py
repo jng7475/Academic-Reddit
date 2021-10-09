@@ -27,66 +27,74 @@ class MainProcess():
         return subreddit_name_variable
 
     def get_subreddit_data(self):
-        #get data from the chosen subreddit
+            #get data from the chosen subreddit
         reddit = praw.Reddit(client_id='gOvMlso5eSn1FOScDhBYxg', client_secret='0agQ0Sf7X0_x-_84lvOHApYem5gOZw', user_agent='UTD_data')
-
+        #top 20 posts
         hot_posts = reddit.subreddit(self.get_subreddit_name()).hot(limit=20)
+        tags = []
         titles = []
+        content = []
+        #get title for each post
         for post in hot_posts:
             if post.selftext == "":
                 continue
             titles.append(post.title)
+            tags.append(post.link_flair_text)
+            content.append(post.selftext)
             if len(titles) == 10:
                 break
-        return titles
-
-    academic_word_list = ["learn", "study", "learning", "elearning", 
-                        "class", "classes", "coding", "major", "minor",
-                        "CS", "PHYS", "MATH", "Internships", "lecture",
-                        "books", "Computer Science"]
-
+        return [titles, tags, content]
+ 
     def get_number(self):
-        academic_posts = 0
-        non_academic_posts = 0
-        subreddit_titles = self.get_subreddit_data()
-        for title in subreddit_titles:
-            for word in MainProcess.academic_word_list:
-                is_academic = False
-                if word in title:
-                    academic_posts +=1
-                    is_academic = True
-                    break
-            if not is_academic:
-                non_academic_posts += 1
-        return [academic_posts, non_academic_posts]
-
-    def get_posts(self):
-        reddit = praw.Reddit(client_id='gOvMlso5eSn1FOScDhBYxg', client_secret='0agQ0Sf7X0_x-_84lvOHApYem5gOZw', user_agent='UTD_data')
-
-        posts = reddit.subreddit(self.get_subreddit_name()).hot(limit=20)
         acaPosts = []
         nonAcaPosts = []
         acaTitles = []
         nonAcaTitles = []
-        for post in posts:
-            if post.selftext == "":
-                continue
-            for word in MainProcess.academic_word_list:
-                is_academic = False
-                if word in post.title:
-                    acaTitles.append(post.title)
-                    acaPosts.append(post.selftext)
-                    is_academic = True
-                    break
+        academic_posts = 0
+        non_academic_posts = 0
+        subreddit_titles = self.get_subreddit_data()[0]
+        subreddit_tags = self.get_subreddit_data()[1]
+        subreddit_contents = self.get_subreddit_data()[2]
+        for i in range(len(subreddit_tags)):
+            is_academic = False
+            if subreddit_tags[i] == 'Question: Academics':
+                academic_posts +=1
+                is_academic = True
+                acaTitles.append(subreddit_titles[i])
+                acaPosts.append(subreddit_contents[i])
             if not is_academic:
-                nonAcaTitles.append(post.title)
-                nonAcaPosts.append(post.selftext)
-            if len(acaPosts) + len(nonAcaPosts) == 10:
-                break
-        return acaTitles, acaPosts, nonAcaTitles, nonAcaPosts
+                non_academic_posts += 1
+                nonAcaTitles.append(subreddit_titles[i])
+                nonAcaPosts.append(subreddit_contents[i])
+        return [academic_posts, non_academic_posts, acaTitles, acaPosts, nonAcaTitles, nonAcaPosts]
+
+    #def get_posts(self):
+    #    reddit = praw.Reddit(client_id='gOvMlso5eSn1FOScDhBYxg', client_secret='0agQ0Sf7X0_x-_84lvOHApYem5gOZw', user_agent='UTD_data')
+#
+    #    posts = reddit.subreddit(self.get_subreddit_name()).hot(limit=20)
+    #    acaPosts = []
+    #    nonAcaPosts = []
+    #    acaTitles = []
+    #    nonAcaTitles = []
+    #    for post in posts:
+    #        if post.selftext == "":
+    #            continue
+    #        for word in MainProcess.academic_word_list:
+    #            is_academic = False
+    #            if word in post.title:
+    #                acaTitles.append(post.title)
+    #                acaPosts.append(post.selftext)
+    #                is_academic = True
+    #                break
+    #        if not is_academic:
+    #            nonAcaTitles.append(post.title)
+    #            nonAcaPosts.append(post.selftext)
+    #        if len(acaPosts) + len(nonAcaPosts) == 10:
+    #            break
+    #    return acaTitles, acaPosts, nonAcaTitles, nonAcaPosts
 
 
 
 a = MainProcess("UTD")
-l1, l2, l3, l4 = a.get_posts()
-print(l4)
+l1, l2, l3, l4, l5, l6= a.get_number()
+print(l1, l2, l3)
